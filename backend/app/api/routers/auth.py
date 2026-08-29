@@ -45,3 +45,19 @@ def read_current_user(current_user: CurrentUser) -> Any:
     Get current user.
     """
     return current_user
+
+@router.post("/demo", response_model=Token)
+def demo_login(session: SessionDep) -> Any:
+    """
+    Login as the demo user automatically without password.
+    """
+    auth_service = AuthService(session)
+    user = auth_service.repository.get_by_email("demo@finora.ai")
+    if not user:
+        raise HTTPException(status_code=404, detail="Demo user not found in database. Seed the database first.")
+    
+    access_token = create_access_token(user.id)
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }

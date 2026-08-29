@@ -36,6 +36,10 @@ def seed():
             ))
         else:
             print("Demo user already exists.")
+            # Clear existing transactions for fresh Indian seed
+            db.query(Transaction).filter(Transaction.user_id == user.id).delete()
+            db.commit()
+            print("Cleared existing transactions for fresh seed.")
 
         # Create Default Categories (Global)
         categories_data = [
@@ -51,6 +55,7 @@ def seed():
             ("Travel", TransactionType.EXPENSE, "✈️"),
             ("Rent", TransactionType.EXPENSE, "🏠"),
             ("Subscriptions", TransactionType.EXPENSE, "🔄"),
+            ("Savings & Investments", TransactionType.EXPENSE, "💰"),
             ("Other", TransactionType.EXPENSE, "📦")
         ]
         
@@ -69,9 +74,9 @@ def seed():
         # Create Demo Accounts
         print("Creating demo accounts...")
         accounts_data = [
-            ("Chase Checking", AccountType.BANK, "USD"),
-            ("Amex Platinum", AccountType.CREDIT_CARD, "USD"),
-            ("Fidelity Brokerage", AccountType.INVESTMENT, "USD")
+            ("HDFC Salary Account", AccountType.BANK, "INR"),
+            ("SBI Credit Card", AccountType.CREDIT_CARD, "INR"),
+            ("Zerodha Demat", AccountType.INVESTMENT, "INR")
         ]
         
         account_map = {}
@@ -82,110 +87,124 @@ def seed():
                 db.add(acc)
                 db.commit()
                 db.refresh(acc)
+            else:
+                acc.current_balance = Decimal("0.00")
+                db.commit()
+                db.refresh(acc)
             account_map[name] = acc
             
-        # Create 6 months of transactions
-        print("Creating 6 months of realistic transactions...")
+        # Create 12 months of realistic transactions
+        print("Creating 12 months of realistic transactions...")
         tx_service = TransactionService(db)
         
-        # Check if transactions already exist for this user
-        existing_tx_count = db.query(Transaction).filter(Transaction.user_id == user.id).count()
-        if existing_tx_count > 0:
-            print(f"Found {existing_tx_count} existing transactions. Skipping transaction seed to avoid duplicates.")
-            return
-
         from backend.app.schemas.transaction import TransactionCreate
         
         end_date = date.today()
-        start_date = end_date - timedelta(days=180)
+        start_date = end_date - timedelta(days=365)
         
         current_date = start_date
         
         while current_date <= end_date:
-            # Salary (1st and 15th)
-            if current_date.day in (1, 15):
+            # Salary (1st of every month)
+            if current_date.day == 1:
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Chase Checking"].id,
+                    account_id=account_map["HDFC Salary Account"].id,
                     category_id=category_map["Salary"].id,
                     type=TransactionType.INCOME,
-                    amount=Decimal("3500.00"),
-                    description="Acme Corp Salary",
-                    merchant="Acme Corp",
+                    amount=Decimal("80000.00"),
+                    description="Infosys Salary",
+                    merchant="Infosys Ltd",
                     transaction_date=current_date
                 ))
             
-            # Rent (1st)
-            if current_date.day == 1:
+            # Rent (3rd of every month)
+            if current_date.day == 3:
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Chase Checking"].id,
+                    account_id=account_map["HDFC Salary Account"].id,
                     category_id=category_map["Rent"].id,
                     type=TransactionType.EXPENSE,
-                    amount=Decimal("2200.00"),
-                    description="Monthly Rent",
-                    merchant="Irvine Company",
+                    amount=Decimal("18500.00"),
+                    description="Monthly Rent Transfer",
+                    merchant="Landlord",
+                    transaction_date=current_date
+                ))
+
+            # SIP Investment (10th of every month)
+            if current_date.day == 10:
+                tx_service.create_transaction(user.id, TransactionCreate(
+                    account_id=account_map["HDFC Salary Account"].id,
+                    category_id=category_map["Savings & Investments"].id,
+                    type=TransactionType.EXPENSE,
+                    amount=Decimal("5000.00"),
+                    description="Mutual Fund SIP",
+                    merchant="Zerodha Coin",
                     transaction_date=current_date
                 ))
                 
-            # Subscriptions
+            # Subscriptions & Bills
             if current_date.day == 5:
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Amex Platinum"].id,
+                    account_id=account_map["SBI Credit Card"].id,
                     category_id=category_map["Subscriptions"].id,
                     type=TransactionType.EXPENSE,
-                    amount=Decimal("15.99"),
-                    description="Netflix Premium",
-                    merchant="Netflix",
+                    amount=Decimal("199.00"),
+                    description="Netflix Mobile",
+                    merchant="Netflix India",
                     transaction_date=current_date
                 ))
             if current_date.day == 12:
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Amex Platinum"].id,
-                    category_id=category_map["Subscriptions"].id,
+                    account_id=account_map["SBI Credit Card"].id,
+                    category_id=category_map["Bills & Utilities"].id,
                     type=TransactionType.EXPENSE,
-                    amount=Decimal("10.99"),
-                    description="Spotify Premium",
-                    merchant="Spotify",
+                    amount=Decimal("749.00"),
+                    description="Jio Postpaid",
+                    merchant="Reliance Jio",
                     transaction_date=current_date
                 ))
                 
             # Groceries & Food (Randomly throughout week)
-            if random.random() < 0.4:
-                merchants = ["Whole Foods", "Trader Joe's", "Sweetgreen", "Starbucks", "Uber Eats"]
+            if random.random() < 0.5:
+                merchants = ["Zomato", "Swiggy", "Blinkit", "Zepto", "D-Mart", "Starbucks", "Local Kirana"]
                 merchant = random.choice(merchants)
-                amt = Decimal(str(round(random.uniform(5.0, 150.0), 2)))
+                amt = Decimal(str(round(random.uniform(150.0, 1200.0), 2)))
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Amex Platinum"].id if amt > 20 else account_map["Chase Checking"].id,
+                    account_id=account_map["SBI Credit Card"].id if amt > 300 else account_map["HDFC Salary Account"].id,
                     category_id=category_map["Food & Dining"].id,
                     type=TransactionType.EXPENSE,
                     amount=amt,
-                    description=f"{merchant} Purchase",
+                    description=f"{merchant} Order",
                     merchant=merchant,
                     transaction_date=current_date
                 ))
                 
             # Transportation
-            if random.random() < 0.2:
+            if random.random() < 0.3:
+                merchants = ["Ola Cabs", "Uber India", "Namma Metro", "IRCTC"]
+                merchant = random.choice(merchants)
+                amt = Decimal(str(round(random.uniform(40.0, 600.0), 2)))
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Amex Platinum"].id,
+                    account_id=account_map["HDFC Salary Account"].id,
                     category_id=category_map["Transportation"].id,
                     type=TransactionType.EXPENSE,
-                    amount=Decimal(str(round(random.uniform(15.0, 60.0), 2))),
-                    description="Uber Ride",
-                    merchant="Uber",
+                    amount=amt,
+                    description=f"{merchant} Ride",
+                    merchant=merchant,
                     transaction_date=current_date
                 ))
 
-            # Introduce an Anomaly (Once every ~45 days)
-            if random.random() < 0.02:
+            # iPhone Anomaly (Exactly 1 month ago)
+            last_month_date = end_date - timedelta(days=30)
+            if current_date == last_month_date:
                 tx_service.create_transaction(user.id, TransactionCreate(
-                    account_id=account_map["Amex Platinum"].id,
+                    account_id=account_map["SBI Credit Card"].id,
                     category_id=category_map["Shopping"].id,
                     type=TransactionType.EXPENSE,
-                    amount=Decimal(str(round(random.uniform(800.0, 2500.0), 2))),
-                    description="Apple Store",
-                    merchant="Apple",
+                    amount=Decimal("79900.00"),
+                    description="Apple iPhone 15",
+                    merchant="Imagine Store",
                     transaction_date=current_date,
-                    notes="Unusually high transaction anomaly"
+                    notes="Bought a new iPhone!"
                 ))
                 
             current_date += timedelta(days=1)
@@ -204,8 +223,4 @@ def seed():
 
 if __name__ == "__main__":
     seed()
-# Activity increment 1
-# Activity increment 2
-# Activity increment 3
-# Activity increment 4
-# Activity increment 5
+

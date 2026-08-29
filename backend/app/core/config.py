@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     DATABASE_URL: str
     
+    GROQ_API_KEY: str | None = None
+    GROQ_MODEL: str = "qwen/qwen3.6-27b"
+    
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
