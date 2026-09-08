@@ -3,6 +3,11 @@ export interface User {
   email: string;
   full_name?: string;
 }
+export interface Category {
+  id: string;
+  name: string;
+  type: string;
+}
 
 export interface DashboardMetrics {
   total_balance: number;
@@ -66,7 +71,7 @@ export interface Transaction {
   transaction_date: string;
   merchant: string;
   description?: string;
-  transaction_type: string;
+  type: string;
   category?: { name: string };
   account?: { name: string };
 }

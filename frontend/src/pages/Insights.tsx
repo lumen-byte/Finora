@@ -97,7 +97,7 @@ export default function Insights() {
                     <p className="text-xs text-slate-500 mt-1 capitalize">{item.frequency.toLowerCase()} • {item.transaction_count} past payments</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-slate-900">₹{item.average_amount.toFixed(2)}</p>
+                    <p className="font-semibold text-slate-900">₹{Number(item.average_amount).toFixed(2)}</p>
                     <span className="inline-block mt-1.5 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded text-[10px] font-bold uppercase tracking-wider border border-indigo-100">
                       {Math.round(item.confidence_score * 100)}% Match
                     </span>
@@ -134,7 +134,7 @@ export default function Insights() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-rose-600">₹{item.transaction.amount.toFixed(2)}</p>
+                      <p className="font-bold text-rose-600">₹{Number(item.transaction.amount).toFixed(2)}</p>
                     </div>
                   </div>
                   <div className="bg-rose-50 px-3 py-2.5 rounded-lg border border-rose-100">

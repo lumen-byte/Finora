@@ -7,7 +7,7 @@ export default function DemoGuide() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const hasSeen = localStorage.getItem('finora_demo_seen');
+    const hasSeen = localStorage.getItem('finora_b2b_demo_seen');
     if (!hasSeen) {
       setIsVisible(true);
     }
@@ -15,7 +15,7 @@ export default function DemoGuide() {
 
   const dismiss = () => {
     setIsVisible(false);
-    localStorage.setItem('finora_demo_seen', 'true');
+    localStorage.setItem('finora_b2b_demo_seen', 'true');
   };
 
   if (!isVisible) return null;
@@ -34,7 +34,7 @@ export default function DemoGuide() {
       
       <div className="p-5 space-y-4">
         <p className="text-sm text-slate-600 leading-relaxed">
-          Finora is fully populated with 6 months of deterministic financial data. Try exploring:
+          Finora is fully populated with 12 months of deterministic corporate financial data. Try exploring:
         </p>
         
         <ul className="space-y-3">
@@ -47,7 +47,7 @@ export default function DemoGuide() {
           <li>
             <button onClick={() => navigate('/insights')} className="flex items-start text-left group">
               <Lightbulb className="w-4 h-4 mr-2 text-finora-500 mt-0.5 group-hover:text-finora-600 transition-colors" />
-              <span className="text-sm font-medium text-slate-700 group-hover:text-finora-600 transition-colors">Insights (Anomalies & Subscriptions)</span>
+              <span className="text-sm font-medium text-slate-700 group-hover:text-finora-600 transition-colors">Insights (SaaS Subs & Budget Anomalies)</span>
             </button>
           </li>
           <li>
@@ -60,8 +60,8 @@ export default function DemoGuide() {
 
         <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
           <p className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Try asking the AI:</p>
-          <p className="text-xs italic text-slate-600">"Why did I spend more this month?"</p>
-          <p className="text-xs italic text-slate-600 mt-1">"Did anything unusual happen?"</p>
+          <p className="text-xs italic text-slate-600">"Why did the engineering budget increase this month?"</p>
+          <p className="text-xs italic text-slate-600 mt-1">"What are our total payroll expenses?"</p>
         </div>
 
         <button 

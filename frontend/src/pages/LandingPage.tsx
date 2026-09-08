@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Hexagon, ArrowRight, BrainCircuit, Activity, BarChart3, MessageSquare, Database, ArrowDown } from 'lucide-react';
 import { apiClient } from '../api/client';
 
@@ -31,13 +31,13 @@ export default function LandingPage() {
           <span className="text-2xl font-bold tracking-tight">Finora</span>
         </div>
         <div className="flex space-x-4">
-          <button 
-            onClick={handleDemoLogin}
-            disabled={loading}
-            className="bg-finora-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-finora-700 transition-colors flex items-center"
+          <Link to="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 px-4 py-2">Log in</Link>
+          <Link 
+            to="/register"
+            className="bg-finora-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-finora-700 transition-colors flex items-center shadow-sm"
           >
-            {loading ? 'Entering Demo...' : 'Explore Demo'}
-          </button>
+            Get Started
+          </Link>
         </div>
       </nav>
 
@@ -46,23 +46,28 @@ export default function LandingPage() {
         <section className="max-w-4xl mx-auto px-6 pt-24 pb-20 text-center">
           <div className="inline-flex items-center space-x-2 bg-finora-50 text-finora-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-8">
             <BrainCircuit className="w-4 h-4" />
-            <span>AI-Powered Financial Intelligence</span>
+            <span>Enterprise Budget & Expense Intelligence</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
-            Your financial data, explained.
+            Your company's finances, centralized.
           </h1>
           <p className="text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-            An AI-powered financial intelligence platform that analyzes transactions, detects recurring expenses and unusual spending, and answers financial questions using grounded, deterministic data.
+            An enterprise financial platform to track departmental budgets, monitor SaaS subscriptions, detect spending anomalies, and answer complex financial questions with deterministically accurate AI.
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <Link 
+              to="/register"
+              className="w-full sm:w-auto bg-finora-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-finora-700 transition-all flex items-center justify-center shadow-lg shadow-finora-200"
+            >
+              Create Free Account <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
             <button 
               onClick={handleDemoLogin}
               disabled={loading}
-              className="w-full sm:w-auto bg-finora-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-finora-700 transition-all flex items-center justify-center shadow-lg shadow-finora-200"
+              className="w-full sm:w-auto bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-full font-semibold text-lg hover:bg-slate-50 transition-all flex items-center justify-center shadow-sm"
             >
-              {loading ? 'Entering Demo...' : 'Explore Demo'}
-              {!loading && <ArrowRight className="w-5 h-5 ml-2" />}
+              {loading ? 'Entering...' : 'Try Demo'}
             </button>
           </div>
           {error && <p className="text-red-500 mt-4 font-medium">{error}</p>}
@@ -80,9 +85,9 @@ export default function LandingPage() {
                 <div className="w-16 h-16 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center text-finora-600 mb-6 shadow-sm mx-auto md:mx-0">
                   <Database className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-center md:text-left">1. Connect Your Financial Data</h3>
+                <h3 className="text-xl font-bold mb-3 text-center md:text-left">1. Connect Your Departments</h3>
                 <p className="text-slate-600 leading-relaxed text-center md:text-left">
-                  Accounts and transactions become structured financial data ready for analysis.
+                  Departmental budgets and corporate transactions become structured financial data ready for analysis.
                 </p>
               </div>
 
@@ -135,13 +140,12 @@ export default function LandingPage() {
         {/* Final CTA */}
         <section className="py-24 text-center bg-white">
           <h2 className="text-3xl font-bold mb-8">Ready to see it in action?</h2>
-          <button 
-            onClick={handleDemoLogin}
-            disabled={loading}
-            className="bg-finora-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-finora-700 transition-all shadow-lg"
+          <Link 
+            to="/register"
+            className="bg-finora-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-finora-700 transition-all shadow-lg inline-block"
           >
-            {loading ? 'Entering Demo...' : 'Explore Demo Now'}
-          </button>
+            Get Started for Free
+          </Link>
         </section>
       </main>
     </div>

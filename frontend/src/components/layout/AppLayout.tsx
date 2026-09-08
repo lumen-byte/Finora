@@ -10,7 +10,8 @@ import {
   LogOut,
   Hexagon,
   Menu,
-  X
+  X,
+  Wallet
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -26,7 +27,7 @@ const navItems = [
   { path: '/analytics', label: 'Analytics', icon: BarChart3 },
   { path: '/insights', label: 'Insights', icon: Lightbulb },
   { path: '/copilot', label: 'FinoraAI', icon: MessageSquare },
-  { path: '/accounts', label: 'Accounts', icon: Landmark },
+  { path: '/accounts', label: 'Departments', icon: Wallet },
 ];
 
 export default function AppLayout() {

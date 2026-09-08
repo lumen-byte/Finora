@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
 import { apiClient } from '../api/client';
 import type { Transaction } from '../types';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { TableSkeleton } from '../components/ui/Loaders';
 import { EmptyState } from '../components/ui/States';
+import TransactionModal from '../components/transactions/TransactionModal';
+import { Plus } from 'lucide-react';
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -16,6 +19,12 @@ export default function Transactions() {
   const [endDate, setEndDate] = useState('');
   const [skip, setSkip] = useState(0);
   const limit = 20;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const [searchParams] = useSearchParams();
+  const accountIdParam = searchParams.get('account_id') || undefined;
 
   useEffect(() => {
     async function fetchData() {
@@ -29,6 +38,7 @@ export default function Transactions() {
         if (type) params.append('type', type);
         if (startDate) params.append('start_date', startDate);
         if (endDate) params.append('end_date', endDate);
+        if (accountIdParam) params.append('account_id', accountIdParam);
 
         const res = await apiClient.get(`/transactions?${params.toString()}`);
         setTransactions(res.data);
@@ -42,12 +52,19 @@ export default function Transactions() {
     // Add a small debounce for search
     const timeout = setTimeout(fetchData, 300);
     return () => clearTimeout(timeout);
-  }, [search, type, startDate, endDate, skip]);
+  }, [search, type, startDate, endDate, skip, refreshTrigger, accountIdParam]);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-slate-900">Transactions</h1>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-finora-600 hover:bg-finora-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center text-sm shadow-sm"
+        >
+          <Plus className="w-4 h-4 mr-1.5" />
+          Add Transaction
+        </button>
       </div>
 
       <Card className="p-4 bg-slate-50 border border-slate-200">
@@ -118,8 +135,8 @@ export default function Transactions() {
                         {t.category?.name || 'Uncategorized'}
                       </span>
                     </td>
-                    <td className={`px-6 py-4 text-right font-semibold ${t.transaction_type === 'INCOME' ? 'text-emerald-600' : 'text-slate-900'}`}>
-                      {t.transaction_type === 'INCOME' ? '+' : '-'}₹{Math.abs(t.amount).toFixed(2)}
+                    <td className={`px-6 py-4 text-right font-semibold ${t.type === 'INCOME' ? 'text-emerald-600' : 'text-slate-900'}`}>
+                      {t.type === 'INCOME' ? '+' : '-'}₹{Math.abs(t.amount).toFixed(2)}
                     </td>
                   </tr>
                 ))}
@@ -150,6 +167,16 @@ export default function Transactions() {
           </div>
         </Card>
       )}
+
+      <TransactionModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => {
+          setSkip(0);
+          setRefreshTrigger(prev => prev + 1);
+        }}
+        defaultAccountId={accountIdParam}
+      />
     </div>
   );
 }

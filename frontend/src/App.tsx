@@ -7,6 +7,8 @@ import Transactions from './pages/Transactions';
 import Insights from './pages/Insights';
 import Copilot from './pages/Copilot';
 import Accounts from './pages/Accounts';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   const token = localStorage.getItem('finora_token');
@@ -15,6 +17,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={token ? <Navigate to="/dashboard" /> : <LandingPage />} />
+        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
+        <Route path="/register" element={token ? <Navigate to="/dashboard" /> : <Register />} />
         
         {/* Protected Routes */}
         <Route element={<AppLayout />}>

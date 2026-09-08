@@ -54,9 +54,9 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard title="Total Balance" value={`₹${metrics.total_balance}`} icon={Wallet} />
+        <MetricCard title="Total Company Capital" value={`₹${metrics.total_balance}`} icon={Wallet} />
         <MetricCard 
-          title="Monthly Income" 
+          title="Monthly Company Income" 
           value={`₹${metrics.total_income}`} 
           trend={metrics.income_change_percentage}
           icon={TrendingUp} 
@@ -70,7 +70,7 @@ export default function Dashboard() {
           trendGood={false} 
         />
         <MetricCard 
-          title="Savings Rate" 
+          title="Budget Surplus" 
           value={`${metrics.savings_rate}%`} 
           icon={PiggyBank} 
         />
