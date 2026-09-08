@@ -18,7 +18,7 @@ export default function TransactionModal({ isOpen, onClose, onSuccess, defaultAc
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [merchant, setMerchant] = useState('');
-  const [description, setDescription] = useState('Manual Transaction');
+  const [description] = useState('Manual Transaction');
   const [accountId, setAccountId] = useState(defaultAccountId || '');
   const [categoryId, setCategoryId] = useState('');
   

@@ -6,7 +6,6 @@ import {
   Receipt, 
   Lightbulb, 
   MessageSquare, 
-  Landmark,
   LogOut,
   Hexagon,
   Menu,

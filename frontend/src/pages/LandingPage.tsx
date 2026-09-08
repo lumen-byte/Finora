@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Hexagon, ArrowRight, BrainCircuit, Activity, BarChart3, MessageSquare, Database, ArrowDown } from 'lucide-react';
+import { Hexagon, ArrowRight, BrainCircuit, Activity, MessageSquare, Database, ArrowDown } from 'lucide-react';
 import { apiClient } from '../api/client';
 
 export default function LandingPage() {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, PlayCircle, BarChart3, MessageSquare, Lightbulb, Receipt } from 'lucide-react';
+import { X, PlayCircle, BarChart3, MessageSquare, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function DemoGuide() {

@@ -43,7 +43,7 @@ export default function Insights() {
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <CardSkeleton className="col-span-full" />
+          <div className="col-span-full"><CardSkeleton /></div>
           <CardSkeleton />
           <CardSkeleton />
         </div>
