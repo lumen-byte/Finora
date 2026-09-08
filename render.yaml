@@ -11,6 +11,8 @@ services:
     env: docker
     plan: free
     region: ohio
+    rootDir: .
+    dockerfilePath: Dockerfile
     envVars:
       - key: DATABASE_URL
         fromDatabase:
