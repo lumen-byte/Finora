@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Hexagon, ArrowRight, BrainCircuit, Activity, MessageSquare, Database, ArrowDown } from 'lucide-react';
 import { apiClient } from '../api/client';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -13,7 +16,7 @@ export default function LandingPage() {
     setError('');
     try {
       const response = await apiClient.post('/auth/demo');
-      localStorage.setItem('finora_token', response.data.access_token);
+      login(response.data.access_token);
       navigate('/dashboard');
     } catch (err) {
       console.error(err);

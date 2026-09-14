@@ -15,6 +15,7 @@ import {
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import DemoGuide from '../ui/DemoGuide';
+import { useAuth } from '../../contexts/AuthContext';
 
 function cn(...inputs: (string | undefined | null | false)[]) {
   return twMerge(clsx(inputs));
@@ -31,10 +32,11 @@ const navItems = [
 
 export default function AppLayout() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('finora_token');
+    logout();
     navigate('/');
   };
 
