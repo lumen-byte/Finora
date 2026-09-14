@@ -50,11 +50,19 @@ export default function Accounts() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-slate-900">Department Budgets</h1>
-          <button className="bg-finora-600 hover:bg-finora-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm shadow-sm">
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-finora-600 hover:bg-finora-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm shadow-sm"
+          >
             Add Department
           </button>
         </div>
-        <EmptyState icon={Wallet} title="No departments linked" message="Link a department to get started." />
+        <EmptyState icon={Wallet} title="No departments linked" message="Create your first department to get started." />
+        <DepartmentModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={() => setRefreshTrigger(prev => prev + 1)}
+        />
       </div>
     );
   }
