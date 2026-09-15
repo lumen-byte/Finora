@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated, Any
 
 from backend.app.schemas.user import UserCreate, UserResponse
-from backend.app.schemas.auth import Token
+from backend.app.schemas.auth import Token, GoogleLogin
 from backend.app.api.deps import SessionDep, CurrentUser
 from backend.app.services.auth_service import AuthService
 from backend.app.core.security import create_access_token
@@ -55,6 +55,22 @@ def demo_login(session: SessionDep) -> Any:
     user = auth_service.repository.get_by_email("demo@finora.ai")
     if not user:
         raise HTTPException(status_code=404, detail="Demo user not found in database. Seed the database first.")
+    
+    access_token = create_access_token(user.id)
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }
+
+@router.post("/google", response_model=Token)
+def google_login(login_data: GoogleLogin, session: SessionDep) -> Any:
+    """
+    Login or register a user via Google OAuth.
+    """
+    auth_service = AuthService(session)
+    user = auth_service.authenticate_google_user(email=login_data.email, google_id=login_data.google_id)
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
     
     access_token = create_access_token(user.id)
     return {

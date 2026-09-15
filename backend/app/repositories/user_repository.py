@@ -25,3 +25,21 @@ class UserRepository:
         self.session.commit()
         self.session.refresh(db_user)
         return db_user
+
+    def create_google_user(self, email: str, google_id: str) -> User:
+        db_user = User(
+            email=email,
+            google_id=google_id,
+            is_active=True
+        )
+        self.session.add(db_user)
+        self.session.commit()
+        self.session.refresh(db_user)
+        return db_user
+
+    def update_google_id(self, user: User, google_id: str) -> User:
+        user.google_id = google_id
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user

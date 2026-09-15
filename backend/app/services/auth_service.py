@@ -22,6 +22,21 @@ class AuthService:
         user = self.repository.get_by_email(email)
         if not user:
             return None
+        if not user.hashed_password:
+            return None
         if not verify_password(password, user.hashed_password):
             return None
+        return user
+
+    def authenticate_google_user(self, email: str, google_id: str) -> User:
+        user = self.repository.get_by_email(email)
+        if not user:
+            return self.repository.create_google_user(email=email, google_id=google_id)
+        if not user.google_id:
+            return self.repository.update_google_id(user=user, google_id=google_id)
+        if user.google_id != google_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Google ID mismatch for this email."
+            )
         return user
