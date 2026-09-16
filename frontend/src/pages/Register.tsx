@@ -51,6 +51,21 @@ export default function Register() {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await apiClient.post('/auth/demo');
+      login(response.data.access_token);
+      navigate('/dashboard');
+    } catch (err) {
+      console.error(err);
+      setError('Could not access demo. Please ensure the backend is running and seeded.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex font-sans">
       {/* Left side: Premium Branding */}
@@ -194,6 +209,30 @@ export default function Register() {
                       <span>Create account</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </>
+                  )}
+                </button>
+              </div>
+              
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-slate-500">Or continue with</span>
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="button"
+                  onClick={handleDemoLogin}
+                  disabled={loading}
+                  className="w-full flex justify-center items-center space-x-2 py-3 px-4 border border-slate-200 rounded-xl shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-finora-500 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <span>Explore Demo Account</span>
                   )}
                 </button>
               </div>
