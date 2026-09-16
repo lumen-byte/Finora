@@ -21,8 +21,16 @@ export default function Analytics() {
           apiClient.get('/analytics/category-breakdown'),
           apiClient.get('/analytics/top-merchants')
         ]);
-        setBreakdown(breakdownRes.data);
-        setMerchants(merchantsRes.data);
+        const formattedBreakdown = breakdownRes.data.map((item: any) => ({
+          ...item,
+          total_amount: parseFloat(item.total_amount)
+        }));
+        const formattedMerchants = merchantsRes.data.map((item: any) => ({
+          ...item,
+          total_amount: parseFloat(item.total_spent || item.total_amount || 0)
+        }));
+        setBreakdown(formattedBreakdown);
+        setMerchants(formattedMerchants);
       } catch (err) {
         console.error(err);
       } finally {
