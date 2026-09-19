@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     
     GROQ_API_KEY: str | None = None
-    GROQ_MODEL: str = "qwen/qwen3.6-27b"
+    GROQ_MODEL: str = "llama-3.1-70b-versatile"
     
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
