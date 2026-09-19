@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     
     GROQ_API_KEY: str | None = None
-    GROQ_MODEL: str = "llama3-8b-8192"
+    GROQ_MODEL: str = "openai/gpt-oss-20b"
     
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
