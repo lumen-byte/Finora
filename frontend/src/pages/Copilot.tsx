@@ -214,12 +214,11 @@ export default function Copilot() {
                       </div>
                     )}
                     <div className="text-sm leading-relaxed w-full">
-                      <ReactMarkdown 
-                        remarkPlugins={[remarkGfm]}
-                        className={cn("prose prose-sm max-w-none break-words", isAssistant ? "prose-slate" : "prose-invert")}
-                      >
-                        {msg.content.replace(/\[TOOL_USED:.*?\]/g, '')}
-                      </ReactMarkdown>
+                      <div className={cn("prose prose-sm max-w-none break-words", isAssistant ? "prose-slate" : "prose-invert")}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.content.replace(/\[TOOL_USED:.*?\]/g, '')}
+                        </ReactMarkdown>
+                      </div>
                       
                       <div className="mt-2 flex flex-wrap gap-2">
                         {msg.content.match(/\[TOOL_USED:.*?\]/g)?.map((match, i) => {
