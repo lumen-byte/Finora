@@ -4,6 +4,8 @@ import { Bot, Send, BrainCircuit, MessageSquare, Loader2, Plus, Trash2, AlertCir
 import { apiClient } from '../api/client';
 import type { CopilotConversation, CopilotMessage } from '../types';
 import { cn } from '../utils/cn';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const TOOL_NAMES: Record<string, string> = {
   get_dashboard_summary: "Financial Overview",
@@ -211,20 +213,26 @@ export default function Copilot() {
                         <Bot className="w-5 h-5 text-finora-600" />
                       </div>
                     )}
-                    <div className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {msg.content.split(/(\[TOOL_USED:.*?\])/).map((part, i) => {
-                        if (part.startsWith('[TOOL_USED:')) {
-                          const toolRaw = part.replace('[TOOL_USED:', '').replace(']', '').trim();
+                    <div className="text-sm leading-relaxed w-full">
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm]}
+                        className={cn("prose prose-sm max-w-none break-words", isAssistant ? "prose-slate" : "prose-invert")}
+                      >
+                        {msg.content.replace(/\[TOOL_USED:.*?\]/g, '')}
+                      </ReactMarkdown>
+                      
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {msg.content.match(/\[TOOL_USED:.*?\]/g)?.map((match, i) => {
+                          const toolRaw = match.replace('[TOOL_USED:', '').replace(']', '').trim();
                           const humanName = TOOL_NAMES[toolRaw] || toolRaw;
                           return (
-                            <span key={i} className="inline-flex items-center px-2.5 py-1.5 bg-finora-50 text-finora-700 text-xs font-semibold rounded-md mr-1.5 mt-3 border border-finora-100 shadow-sm" title={`Backend Tool: ${toolRaw}`}>
-                              <BrainCircuit className="w-3.5 h-3.5 mr-1.5" />
+                            <span key={i} className="inline-flex items-center px-2.5 py-1.5 bg-finora-50 text-finora-700 text-xs font-semibold rounded-md border border-finora-100 shadow-sm" title={`Backend Tool: ${toolRaw}`}>
+                              <BrainCircuit className="w-3.5 h-3.5 mr-1.5 flex-shrink-0" />
                               Analyzed using: {humanName}
                             </span>
                           );
-                        }
-                        return <span key={i}>{part}</span>;
-                      })}
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
