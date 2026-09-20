@@ -1,77 +1,59 @@
-# Finora: Enterprise Financial Intelligence
+# Finora: Enterprise Financial Intelligence Engine
 
-**Finora** is a premium, AI-powered financial intelligence platform designed for B2B and enterprise use cases. It tracks transactions, analyzes department-level spending behavior, and provides real-time, mathematically accurate financial insights via a grounded AI Copilot.
+Finora is a robust, AI-augmented financial intelligence platform engineered for enterprise and B2B workflows. It aggregates transactional data, executes deterministic analyses on department-level spending behaviors, and interfaces with a grounded Large Language Model (LLM) to surface real-time, mathematically validated insights.
 
-Unlike standard LLM wrappers, Finora uses a **Deterministic Analytics Engine** connected to the AI via **Function Calling**. This ensures the AI never hallucinates balances, math, or financial history.
+The platform distinguishes itself from standard LLM wrappers by leveraging a strict Function Calling architecture. Analytical computation is isolated within a Deterministic Analytics Engine; the LLM acts solely as a natural language routing layer and presentation interface, mathematically guaranteeing that the system never hallucinates balances, transaction histories, or statistical aggregations.
 
-## 🚀 Key Features
+## System Architecture
 
-*   **Financial Dashboard:** Real-time metrics including Total Balance, Monthly Revenue/Expenses, and Net Savings Rate with dynamic Area and Bar charts.
-*   **System Intelligence Engine:**
-    *   *Recurring Expense Detection:* Automatically identifies software subscriptions, payroll, and recurring vendor bills.
-    *   *Anomaly Detection:* Statistically isolates highly unusual spending spikes using moving averages and standard deviations.
-    *   *Month-over-Month Comparisons:* Tracks granular changes in category spending over time.
-*   **Grounded AI Copilot (FinoraAI):** Powered by Groq's high-speed inference and the `gpt-oss-20b` model. The Copilot translates natural language into structured API queries, fetching real backend data. It renders responses in beautiful, native Markdown (including tables) thanks to `react-markdown` and `@tailwindcss/typography`.
-*   **Enterprise Department Management:** Track budgets and balances across distinct departments (Engineering, HR, Sales, Executive).
-*   **Premium UX/UI:** Built with React, Tailwind CSS, and Recharts. Features micro-animations, skeleton loaders, and a responsive mobile sidebar with a sleek, polished SaaS aesthetic.
+Finora is built on a decoupled, service-oriented architecture designed for scalability and strict separation of concerns.
 
-## 🛠️ Technology Stack
+### Frontend Client
+- **Framework:** React 18 with TypeScript, orchestrated by Vite.
+- **State & Routing:** Context-driven state management with React Router for SPA navigation.
+- **Data Visualization:** Recharts for dynamic rendering of high-density time-series financial data.
+- **LLM Rendering:** Integrated `react-markdown` and `remark-gfm` pipelines to safely parse and style structured AI responses, including tabular data and inline tool-execution badges.
+- **Styling:** Utility-first styling via Tailwind CSS, enforcing a strict design system and typography hierarchy.
 
-### Frontend
-*   React 18 + TypeScript + Vite
-*   Tailwind CSS (Styling + Typography plugin)
-*   Recharts (Data Visualization)
-*   Lucide React (Icons)
-*   React-Markdown (Rich Text AI Responses)
+### Backend API
+- **Framework:** Python 3.12 executing FastAPI under ASGI (Uvicorn).
+- **Data Persistence:** PostgreSQL 15+, interfaced via SQLAlchemy 2.0 (ORM) with Alembic for deterministic schema migrations.
+- **Design Pattern:** Strict Repository-Service pattern. Data access logic (Repositories) is entirely decoupled from business logic and LLM orchestration (Services).
+- **Inference Layer:** Interoperable with OpenAI-compatible endpoints (currently optimized for Groq's high-throughput `openai/gpt-oss-20b` endpoint), strictly enforcing JSON-schema function definitions.
 
-### Backend
-*   Python 3.12
-*   FastAPI (Web Framework)
-*   PostgreSQL (Database)
-*   SQLAlchemy 2.0 (ORM) + Alembic (Migrations)
-*   Groq API (AI Inference & Tool Calling)
-*   Docker & Docker Compose (Orchestration)
+## Core Analytics Modules
 
-## 🏗️ Architecture
+- **Temporal Trend Analysis:** Calculates month-over-month (MoM) deltas and normalizes historical spending vectors across distinct departments (e.g., Engineering, Human Resources, Executive).
+- **Recurring Signature Detection:** Iterates over historical transactional graphs to identify recurring frequency patterns, isolating SaaS subscriptions, payroll, and infrastructural overhead.
+- **Statistical Anomaly Isolation:** Employs standard deviation thresholds and moving averages against categorized expense vectors to detect statistically significant spending spikes in real-time.
 
-Finora follows a strict **Service-Oriented Architecture** with the Repository Pattern:
-1.  **Routers (`api/routers/`)**: Handles HTTP requests, validation, and JWT verification.
-2.  **Services (`services/`)**: Contains all core business logic, deterministic analytics, and AI orchestration.
-3.  **Repositories (`repositories/`)**: Manages all SQLAlchemy database transactions and queries.
+## Infrastructure & Deployment
 
-## 🏃‍♂️ Running Locally
+### Local Orchestration
+The local development environment is containerized via Docker and Docker Compose. The build context is optimized via `.dockerignore` for minimal image footprints.
+Upon container initialization, the entrypoint executes:
+1. Alembic schema upgrades to ensure database parity.
+2. An idempotent seeding pipeline that generates 12 months of structured B2B transactional data.
+3. The Uvicorn ASGI server.
 
-### Prerequisites
-*   Docker Desktop installed and running
-*   Node.js (v18+)
-
-### 1. Environment Setup
-Create a `.env` file in the root directory:
+To spin up the local cluster:
 ```bash
+# 1. Configure the environment
 cp .env.example .env
-```
-*Note: You must add a valid `GROQ_API_KEY` to your root `.env` file for the FinoraAI Copilot to function.*
+cp frontend/.env.example frontend/.env
 
-### 2. Start the Backend (Docker)
-The Docker configuration is heavily optimized with a `.dockerignore` file for rapid builds, and automatically runs Alembic migrations and database seeding on startup.
-```bash
+# 2. Initialize the backend cluster
 docker compose up --build -d
-```
-The backend API will be available at `http://localhost:8000`.
 
-### 3. Start the Frontend
-```bash
+# 3. Initialize the frontend client
 cd frontend
 npm install
 npm run dev
 ```
-The frontend will be available at `http://localhost:5173`.
 
-### 4. Explore the Demo
-Simply click the **"Explore Demo"** button on the Login page to instantly authenticate into a seeded enterprise account containing a full 12 months of realistic B2B financial data.
+### Production CI/CD
+- **Frontend Distribution:** The React client is optimized for Edge deployment (e.g., Vercel, Netlify) via static artifact generation.
+- **Backend Infrastructure:** The API and PostgreSQL instances are configured for stateless PaaS deployment (e.g., Render, Railway) utilizing native Dockerfile builds and managed PostgreSQL instances.
 
-## ☁️ Production Deployment
-
-Finora is completely configured for cloud deployment:
-*   **Frontend**: Ready for deployment on Vercel or Netlify.
-*   **Backend**: Includes a `render.yaml` for instant Web Service and PostgreSQL deployment on Render. The `Dockerfile` natively handles DB migrations and seeding on production startup.
+## Authentication & Access
+The platform utilizes stateless JWT authentication. A pre-configured demonstration protocol allows immediate access to the seeded enterprise dataset without requiring explicit user registration, facilitating rapid evaluation of the analytical engine.
