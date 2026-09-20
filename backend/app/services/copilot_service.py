@@ -180,13 +180,17 @@ class CopilotService:
 
         tools_used = []
 
+        from openai import AuthenticationError
         # 4. Call OpenAI with tools
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=messages_for_llm,
-            tools=self._get_tools(),
-            tool_choice="auto"
-        )
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages_for_llm,
+                tools=self._get_tools(),
+                tool_choice="auto"
+            )
+        except AuthenticationError:
+            raise ValueError("Your Groq API key is invalid or was revoked by GitHub Push Protection. Please generate a new key at console.groq.com and update your .env file.")
         
         response_message = response.choices[0].message
         
