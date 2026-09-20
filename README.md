@@ -1,28 +1,28 @@
-# Finora
+# Finora: Enterprise Financial Intelligence
 
-**Finora** is a premium, AI-powered financial intelligence platform designed to track transactions, analyze spending behavior, and provide real-time, mathematically accurate financial insights via a grounded AI Copilot.
+**Finora** is a premium, AI-powered financial intelligence platform designed for B2B and enterprise use cases. It tracks transactions, analyzes department-level spending behavior, and provides real-time, mathematically accurate financial insights via a grounded AI Copilot.
 
 Unlike standard LLM wrappers, Finora uses a **Deterministic Analytics Engine** connected to the AI via **Function Calling**. This ensures the AI never hallucinates balances, math, or financial history.
 
-## 🚀 Features
+## 🚀 Key Features
 
-*   **Financial Dashboard:** Real-time metrics including Total Balance, Monthly Income/Expenses, and Savings Rate with dynamic Area charts.
+*   **Financial Dashboard:** Real-time metrics including Total Balance, Monthly Revenue/Expenses, and Net Savings Rate with dynamic Area and Bar charts.
 *   **System Intelligence Engine:**
-    *   *Recurring Detection:* Automatically identifies subscriptions, rent, and recurring bills.
+    *   *Recurring Expense Detection:* Automatically identifies software subscriptions, payroll, and recurring vendor bills.
     *   *Anomaly Detection:* Statistically isolates highly unusual spending spikes using moving averages and standard deviations.
     *   *Month-over-Month Comparisons:* Tracks granular changes in category spending over time.
-*   **Grounded AI Copilot:** Powered by Groq (Qwen 27B), the Copilot translates natural language into structured API queries, fetching real backend data to construct accurate, non-hallucinated answers.
-*   **Transaction Management:** Full filtering (Income/Expense, Date Ranges, Search) with clean, paginated data tables.
-*   **Premium UX/UI:** Built with React, Tailwind CSS, and Recharts. Features micro-animations, skeleton loaders, and a responsive mobile sidebar.
+*   **Grounded AI Copilot (FinoraAI):** Powered by Groq's high-speed inference and the `gpt-oss-20b` model. The Copilot translates natural language into structured API queries, fetching real backend data. It renders responses in beautiful, native Markdown (including tables) thanks to `react-markdown` and `@tailwindcss/typography`.
+*   **Enterprise Department Management:** Track budgets and balances across distinct departments (Engineering, HR, Sales, Executive).
+*   **Premium UX/UI:** Built with React, Tailwind CSS, and Recharts. Features micro-animations, skeleton loaders, and a responsive mobile sidebar with a sleek, polished SaaS aesthetic.
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 
 ### Frontend
 *   React 18 + TypeScript + Vite
-*   Tailwind CSS (Styling)
+*   Tailwind CSS (Styling + Typography plugin)
 *   Recharts (Data Visualization)
 *   Lucide React (Icons)
-*   Axios (API Client)
+*   React-Markdown (Rich Text AI Responses)
 
 ### Backend
 *   Python 3.12
@@ -46,14 +46,14 @@ Finora follows a strict **Service-Oriented Architecture** with the Repository Pa
 *   Node.js (v18+)
 
 ### 1. Environment Setup
-Copy the example environment files:
+Create a `.env` file in the root directory:
 ```bash
 cp .env.example .env
-cp frontend/.env.example frontend/.env
 ```
-*Note: You must add a valid `GROQ_API_KEY` to your root `.env` file for the AI Copilot to function.*
+*Note: You must add a valid `GROQ_API_KEY` to your root `.env` file for the FinoraAI Copilot to function.*
 
 ### 2. Start the Backend (Docker)
+The Docker configuration is heavily optimized with a `.dockerignore` file for rapid builds, and automatically runs Alembic migrations and database seeding on startup.
 ```bash
 docker compose up --build -d
 ```
@@ -68,4 +68,10 @@ npm run dev
 The frontend will be available at `http://localhost:5173`.
 
 ### 4. Explore the Demo
-Click the **"Explore Demo"** button on the landing page to instantly log in to a seeded demo account containing 6 months of realistic financial data.
+Simply click the **"Explore Demo"** button on the Login page to instantly authenticate into a seeded enterprise account containing a full 12 months of realistic B2B financial data.
+
+## ☁️ Production Deployment
+
+Finora is completely configured for cloud deployment:
+*   **Frontend**: Ready for deployment on Vercel or Netlify.
+*   **Backend**: Includes a `render.yaml` for instant Web Service and PostgreSQL deployment on Render. The `Dockerfile` natively handles DB migrations and seeding on production startup.
