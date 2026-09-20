@@ -1,8 +1,21 @@
 # Finora: Enterprise Financial Intelligence Engine
 
-Finora is a robust, AI-augmented financial intelligence platform engineered for enterprise and B2B workflows. It aggregates transactional data, executes deterministic analyses on department-level spending behaviors, and interfaces with a grounded Large Language Model (LLM) to surface real-time, mathematically validated insights.
+**Live Application:** [https://finora-lumenbyte1.vercel.app/](https://finora-lumenbyte1.vercel.app/)
+**Source Code:** [https://github.com/lumen-byte/Finora](https://github.com/lumen-byte/Finora)
 
-The platform distinguishes itself from standard LLM wrappers by leveraging a strict Function Calling architecture. Analytical computation is isolated within a Deterministic Analytics Engine; the LLM acts solely as a natural language routing layer and presentation interface, mathematically guaranteeing that the system never hallucinates balances, transaction histories, or statistical aggregations.
+*Finora is an enterprise-grade financial intelligence engine that bridges deterministic financial analytics with a mathematically grounded Large Language Model.*
+
+## Problem Statement & Solution
+
+Traditional financial dashboards provide static historical data, forcing operators into manual spreadsheet analysis to extract actionable insights. Conversely, introducing standard Large Language Models (LLMs) to financial data inherently introduces the risk of mathematical hallucinations and data fabrication—a critical failure in enterprise contexts.
+
+Finora resolves this dichotomy. It decouples computational analytics from natural language inference. All mathematical operations and data aggregations are executed by a strict Deterministic Analytics Engine. The LLM is restricted entirely to a routing and presentation layer via Function Calling, enabling operators to query financial states conversationally while maintaining absolute mathematical certainty.
+
+## Core Platform Overview
+
+Finora is a robust, AI-augmented financial intelligence platform engineered for enterprise and B2B workflows. It aggregates transactional data, executes deterministic analyses on department-level spending behaviors, and interfaces with a grounded LLM to surface real-time, mathematically validated insights.
+
+The platform distinguishes itself from standard LLM wrappers by leveraging a strict Function Calling architecture. Analytical computation is isolated within the Deterministic Analytics Engine; the LLM acts solely as a natural language routing layer and presentation interface, mathematically guaranteeing that the system never hallucinates balances, transaction histories, or statistical aggregations.
 
 ## System Architecture
 
