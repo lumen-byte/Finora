@@ -4,7 +4,7 @@
 
 **Source Code:** [https://github.com/lumen-byte/Finora](https://github.com/lumen-byte/Finora)
 
-**Technical Document:** [file:///Users/abhimanyu/Downloads/finora-docs.html](https://finora-lumenbyte1.vercel.app/)
+**Technical Document:** [file:///Users/abhimanyu/Downloads/finora-docs.html](file:///Users/abhimanyu/Downloads/finora-docs.html)
 
 *Finora is an enterprise-grade financial intelligence engine that bridges deterministic financial analytics with a mathematically grounded Large Language Model.*
 
